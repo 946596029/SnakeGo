@@ -1,0 +1,39 @@
+public class Food {
+	public int foodX,foodY;
+	public static int border = 20;
+	Chess point=null;
+	Food()
+	{
+		foodX=0;
+		foodY=0;
+	}
+	public void getChess(Chess temp)
+	{
+		point=temp;
+	}
+	public void setLoc()
+	{
+		int max=2000;
+		int n=0;
+		//////////////////
+		foodX=(int)(Math.random()*100)%border;
+		foodY=(int)(Math.random()*100)%border;
+		int temp=point.getLoc(foodX, foodY);
+		while(temp!=-1&&n<max)
+		{
+			foodX=(int)(Math.random()*100)%border;
+			foodY=(int)(Math.random()*100)%border;
+			temp=point.getLoc(foodX, foodY);
+			n++;
+		}
+		if(n==max)
+		{
+			System.out.println("the while has something wrong !");
+		}
+		else
+		{
+			point.insertAction(foodX, foodY, 1);
+			point.setCount();
+		}
+	}
+}
