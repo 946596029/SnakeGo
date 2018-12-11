@@ -1,0 +1,109 @@
+import java.awt.Color;
+import java.awt.GridLayout;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+
+public class Chess {
+	public static JButton[][] table;
+	public static JPanel Game_Table;
+	public static int x,y,data;
+	public static int[][] chess;
+	public static int border=20;
+	public static int countOfGame=0; 
+	Chess()
+	{
+		table=new JButton[border][border];
+		chess=new int[border][border];
+		Game_Table=new JPanel();
+		Game_Table.setLayout(new GridLayout(border,border,1,1));
+		for(int i=0;i<border;i++)
+		{
+			for(int j=0;j<border;j++)
+			{
+				table[i][j]=new JButton();
+				table[i][j].setBackground(Color.white);
+				chess[i][j]=-1;
+				Game_Table.add(table[i][j]);
+			}
+		}
+	}
+	public void setLoc(int x,int y,int data)
+	{
+		chess[x][y]=data;		
+	}
+	public int getLoc(int x,int y)
+	{
+		return chess[x][y];
+	}
+	public void delLoc(int x,int y)
+	{
+		chess[x][y]=-1;
+	}
+	public void setCount()
+	{
+		countOfGame++;
+	}
+	public int getCount()
+	{
+		return countOfGame;
+	}
+	public void delCount()
+	{
+		countOfGame=0;
+	}
+	public Color getColor(int data)
+	{
+		switch(data)
+		{
+		case(1):
+		{
+			return Color.BLACK;
+		}
+		case(2):
+		{
+			return Color.BLUE;
+		}
+		case(-1):
+		{
+			return Color.WHITE;
+		}
+		default:
+		{
+			System.out.println("error data, the data is: "+data);
+		}
+		}
+		return null;
+	}
+	public int getColor(Color data)
+	{
+		if(data==Color.WHITE)
+		{
+			return -1;
+		}
+		else if(data==Color.BLACK)
+		{
+			return 1;
+		}
+		else if(data==Color.BLUE)
+		{
+			return 2;
+		}
+		else
+		{
+			System.out.println("the error color data is "+data);
+			return (Integer) null;
+		}
+	}
+	public void insertAction(int x,int y,int data)
+	{
+		setLoc(x,y,data);
+		table[x][y].setBackground(getColor(data));
+	}
+	public void DeleteAction(int x,int y)
+	{
+		delLoc(x,y);
+		table[x][y].setBackground(getColor(-1));
+	}
+}
