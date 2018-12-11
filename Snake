@@ -1,0 +1,377 @@
+public class Snake {
+	public static int[][] location=null;
+	public static int len;
+	public static int direction=-1;//1 up 2down 3left 4right
+	public static int start,end;//endλ��Ϊ�գ�len��ʵ�ʳ��ȴ�1
+	public static boolean flag=true; 
+	Chess point=null;
+	Food feed=null;
+	public static int nowDir=-1;
+	public static int nextDir=-1;
+	////////////////////////////////////////////
+	class Node
+	{
+		int x=0;
+		int y=0;
+		Node(int tx,int ty)
+		{
+			x=tx;
+			y=ty;
+		}
+		public int getX()
+		{
+			return x;
+		}
+		public int getY()
+		{
+			return y;
+		}
+		public Node up()
+		{
+			y--;
+			y=(y+20)%20;
+			return this;
+		}
+		public Node down()
+		{
+			y++;
+			y=(y+20)%20;
+			return this;
+		}
+		public Node left()
+		{
+			x--;
+			x=(x+20)%20;
+			return this;
+		}
+		public Node right()
+		{
+			x++;
+			x=(x+20)%20;
+			return this;
+		}
+	}
+	Node coord=null;
+	class Top{
+		int x;
+		int y;
+		int dir;
+		Top()
+		{
+			x=0;
+			y=0;
+			dir=0;
+		}
+		Top(int tx,int ty,int tdir)
+		{
+			x=tx;
+			y=ty;
+			dir=tdir;
+		}
+		public int getX()
+		{
+			return this.x;
+		}
+		public int getY()
+		{
+			return this.y;
+		}
+		public int getDir()
+		{
+			return this.dir;
+		}
+		public Top up()
+		{
+			y--;
+			y=(y+20)%20;
+			return this;
+		}
+		public Top down()
+		{
+			y++;
+			y=(y+20)%20;
+			return this;
+		}
+		public Top left()
+		{
+			x--;
+			x=(x+20)%20;
+			return this;
+		}
+		public Top right()
+		{
+			x++;
+			x=(x+20)%20;
+			return this;
+		}
+	}
+	Top snakeTop=null;
+	////////////////////////////////////////////
+	Snake()
+	{
+		if(location==null)
+		{
+			location=new int[400][3];
+		}
+		len=1;
+		start=0;
+		end=0;
+	}
+	public void getChess(Chess temp)
+	{
+		point=temp;
+	}
+	public void getFood(Food temp)
+	{
+		feed=temp;
+	}
+	public int getLen()
+	{
+		return len;
+	}
+	public void setLen(int data)
+	{
+		len+=data;
+	}
+	public void delLen()
+	{
+		len=0;
+	}
+	
+	public Node getLocation(int loc)
+	{
+		int tx=location[loc][0];
+		int ty=location[loc][1];
+		coord=new Node(tx,ty);
+		return coord;
+	}
+	public void setLocation(int loc,int x,int y)
+	{
+		location[loc][0]=x;
+		location[loc][1]=y;
+	}
+	public void popLocation(int loc)
+	{
+		location[loc][0]=0;
+		location[loc][1]=0;
+		location[loc][2]=0;
+	}
+	
+	public int getDirection(int loc)
+	{
+		System.out.println("the index is: "+loc);
+		return location[loc][2];
+	}
+	public void setDirection(int loc,int data)
+	{
+		location[loc][2]=data;
+	}
+	
+	public boolean getFlag()
+	{
+		return flag;
+	}
+	public void setFlag(boolean data)
+	{
+		flag=data;
+	}
+	
+	public void setNextDir(int data)
+	{
+		nextDir=data;
+	}
+	public int getNextDir()
+	{
+		return this.nextDir;
+	}
+	
+	public int getTopLocOfQuene()
+	{
+		return start;
+	}
+	public void setTopLoc(int loc)
+	{
+		start=(loc+400)%400;
+	}
+	
+	public int getBottomLocOfQuene()
+	{
+		return end;//end��ָ���λ��Ϊnull
+	}
+	public void setBottomLoc(int loc)
+	{
+		end=(loc+400)%400;
+	}
+	////////////////////////////////////////////////////////////////////////////////////
+	public int getQueneBottom()
+	{
+		return (end-1);
+	}
+	////////////////////////////////////////////////////////////////////////////////////
+	public void insertQuene(int x,int y,int direction)
+	{
+		int loc=getBottomLocOfQuene();
+		setLocation(loc,x,y);
+		setDirection(loc,direction);
+		setBottomLoc(loc+1);
+		setLen(1);
+	}
+	public void popQuene()
+	{
+		int loc=getTopLocOfQuene();
+		popLocation(loc);
+		setTopLoc(loc+1);
+		setLen(-1);
+	}
+	public void insert(int x,int y,int direction)
+	{
+		int temp=point.getLoc(x, y);
+		if(temp!=2)
+		{
+			insertQuene(x,y,direction);
+			point.insertAction(x, y, 2);
+		}
+		else
+		{
+			//output error message
+		}
+	}
+	public void pop()
+	{
+		int loc=getTopLocOfQuene();
+		Node temp=getLocation(loc);
+		int x=temp.getX();
+		int y=temp.getY();
+		popQuene();
+		point.DeleteAction(x, y);
+	}
+	
+	public void RandomTopNode()
+	{
+		int x=(int)(Math.random()*100)%20;
+		int y=(int)(Math.random()*100)%20;
+		int direction=1;
+		//insert(x,y,direction);
+		//////////////////////////////
+		location[end][0]=x;
+		location[end][1]=y;
+		location[end][2]=direction;
+		end++;
+		point.insertAction(x, y, 2);
+	}
+	public Top getTopNode()
+	{
+		int loc=getQueneBottom();
+		int tdir=getDirection(loc);
+		coord=getLocation(loc);
+		int tx=coord.x;
+		int ty=coord.y;
+		Top temp=new Top(tx,ty,tdir);
+		return temp;
+	}
+	public void delSnakeBottom()
+	{
+		pop();
+	}
+	public void changeMoveDirection()
+	{
+		setFlag(false);
+		int loc=getQueneBottom();
+		nowDir=getDirection(loc);
+		if(nextDir==-1)
+		{
+			nextDir=nowDir;
+		}
+		else
+		{
+			if(nextDir==4||nextDir==2)
+			{
+				if(nowDir!=2&&nextDir==4)
+				{
+					setDirection(loc,nextDir);
+				}
+				else if(nowDir!=4&&nextDir==2)
+				{
+					setDirection(loc,nextDir);
+				}
+			}
+			else if(nextDir==1||nextDir==3)
+			{
+				if(nowDir!=1&&nextDir==3)
+				{
+					setDirection(loc,nextDir);
+				}
+				else if(nowDir!=3&&nextDir==1)
+				{
+					setDirection(loc,nextDir);
+				}
+			}
+		}
+		setNextDir(-1);
+		setFlag(true);
+	}
+	public void moveAction()
+	{
+		snakeTop=getTopNode();
+		//////////////////////////////////////////////////
+		System.out.println("rechange: "+snakeTop.getX()+" , "+snakeTop.getY()+" , "+snakeTop.getDir());
+		//////////////////////////////////////////////////
+		int tdir=snakeTop.getDir();
+		switch(tdir)
+		{
+			case(1):{
+				snakeTop.up();
+				break;
+			}
+			case(2):{
+				snakeTop.left();
+				break;
+			}
+			case(3):{
+				snakeTop.down();
+				break;
+			}
+			case(4):{
+				snakeTop.right();
+			}
+		}
+		int tx=snakeTop.getX();
+		int ty=snakeTop.getY();
+		int ValueOfLoc=point.getLoc(tx, ty);
+		if(ValueOfLoc==1)
+		{
+			//eat
+			insert(tx,ty,tdir);
+			feed.setLoc();
+		}
+		if(ValueOfLoc==2)
+		{
+			//GameOver;
+		}
+		if(ValueOfLoc==-1)
+		{
+			//move
+			insert(tx,ty,tdir);
+			delSnakeBottom();
+			//////////////////////////////////////////////////
+			System.out.println("changed: "+snakeTop.getX()+" , "+snakeTop.getY()+" , "+snakeTop.getDir());
+			//////////////////////////////////////////////////
+		}
+	}
+	//////ÿ�ν�����һ������
+	public void run()
+	{
+		while(true)
+		{
+			changeMoveDirection();
+			moveAction();
+			try{ 
+				Thread.sleep(200);
+			}
+			catch(Exception e){
+				System.out.println(e.getMessage());
+			}
+		}
+		//�Բ������з����������ж�����ʾ
+	}
+}
