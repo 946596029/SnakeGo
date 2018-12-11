@@ -1,0 +1,41 @@
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+public class input implements KeyListener{
+	public int nextDir;
+	Snake point=null;
+	input()
+	{
+		nextDir=0;
+	}
+	public void getSnake(Snake temp)
+	{
+		point=temp;
+	}
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void keyReleased(KeyEvent event) {
+		if(event.getKeyCode()==KeyEvent.VK_UP)
+		{
+			point.setNextDir(2);
+		}
+		else if(event.getKeyCode()==KeyEvent.VK_DOWN)
+		{
+			point.setNextDir(4);
+		}
+		else if(event.getKeyCode()==KeyEvent.VK_LEFT)
+		{
+			point.setNextDir(1);
+		}
+		else if(event.getKeyCode()==KeyEvent.VK_RIGHT)
+		{
+			point.setNextDir(3);
+		}
+	}
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+}
