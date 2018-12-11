@@ -1,0 +1,39 @@
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JFrame;
+
+public class SnakeGo extends JFrame{
+	Food mouse;
+	Snake sake;
+	Chess table;
+	input control;
+	SnakeGo()
+	{
+		super();
+		table=new Chess();
+		sake=new Snake();
+		mouse=new Food();
+		control=new input();
+		control.getSnake(sake);
+		sake.getChess(table);
+		sake.getFood(mouse);
+		mouse.getChess(table);
+		this.add(table.Game_Table);
+		this.addKeyListener(control);
+		mouse.setLoc();
+		sake.RandomTopNode();
+		////////////////////////////////////////
+		////////////////////////////////////////
+		this.setFocusable(true);
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setBounds(200,300,700,700);
+		this.setVisible(true);
+		this.sake.run();
+	}
+	public static void main(String[] args) 
+	{
+		SnakeGo frame=new SnakeGo();
+	}
+}
