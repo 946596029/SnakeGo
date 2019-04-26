@@ -1,0 +1,189 @@
+import java.awt.Color;
+
+public class Snake {
+	private queue list= null;
+	private coord SnakeHead = null;
+	private int nowdir = -1;
+	private int nextdir = -1;
+	private static int border = 20;
+	private Chess ChessHandler = null;
+	private Food FoodHandler = null;
+	private boolean dirlock = false; // lock the key when process is running
+	private boolean runstate = true; // the game is over ,runstate equal false
+	Snake(){
+		list = new queue();
+		SnakeHead = new coord();
+	}
+	public void getChessHandler(Chess entity){
+		if(entity != null){
+			ChessHandler = entity;
+		}
+		else{
+			System.out.println("Sorry, you transport a empty Chess reference.");
+		}
+	}
+	public void getFoodHandler(Food entity){
+		if(entity != null){
+			FoodHandler = entity;
+		}
+		else{
+			System.out.println("Sorry, you transport a empty Food reference.");
+		}
+	}
+	private void setDirLock(boolean data){
+		this.dirlock = data;
+	}
+	public boolean getDirLock(){
+		return this.dirlock;
+	}// this function is lock the interrupt of keyboard , in case of input so fast.
+	private void setNowDir(int dir){
+		if(dir>=1&&dir<=4){
+			this.nowdir = dir;
+		}
+		else{
+			System.out.println("invaild nowdir value from Snake setNowDir().");
+		}
+	}
+	public int getNowDir(){
+		return this.nowdir;
+	}
+	private void setRunState(boolean state){
+		this.runstate = state;
+	}
+	public boolean getRunState(){
+		return this.runstate;
+	}
+	private void setNextDir(int dir){
+		if(dir>=1&&dir<=4||dir==-1){
+			this.nextdir = dir;
+		}
+		else{
+			System.out.println("invaild nextdir value from Snake setNextDir().");
+		}
+	}
+	public int getNextDir(){
+		return this.nextdir;
+	}
+	//this function is get the first one node of map
+	private void getFirstNodeByRandom(){
+		int tX=(int)(Math.random()*100)%border;
+		int tY=(int)(Math.random()*100)%border;
+		this.SnakeHead.setX(tX);
+		this.SnakeHead.setY(tY);
+		list.push(SnakeHead.getX(),SnakeHead.getY());
+		int dir=(int)(Math.random()*100)%4+1;
+		setNowDir(dir);
+	}
+	private void moveAction(){
+		// move by value of nowdir
+		switch(nowdir){
+			case(1):
+			{
+				// Up
+				int tx = SnakeHead.getX();
+				int next = (tx-1+border)%border;
+				SnakeHead.setX(next);
+				break;
+			}
+			case(2):
+			{
+				// Down
+				int tx = SnakeHead.getX();
+				int next = (tx+1+border)%border;
+				SnakeHead.setX(next);
+				break;
+			}
+			case(3):
+			{
+				// Left
+				int ty = SnakeHead.getY();
+				int next = (ty-1+border)%border;
+				SnakeHead.setY(next);
+				break;
+			}
+			case(4):
+			{
+				// Right
+				int ty = SnakeHead.getY();
+				int next = (ty+1+border)%border;
+				SnakeHead.setY(next); 
+				break;
+			}
+			default:{
+				System.out.println(" Congratulation! haha......");
+			}
+		}
+		boolean isFood = (ChessHandler.getChessNodeColor(SnakeHead.getX(),SnakeHead.getY())==Color.black);
+		boolean isSelf = (ChessHandler.getChessNodeColor(SnakeHead.getX(),SnakeHead.getY())==Color.blue);
+		// update list value
+		list.push(SnakeHead.getX(),SnakeHead.getY());
+		// update chess
+		ChessHandler.setChessNodeColor(SnakeHead.getX(), SnakeHead.getY(), Color.blue);
+		if(isFood == false&&isSelf == false){
+			// if isFood is true , do not need delete ,otherwise the snake does not eat.
+			coord delNode = list.pop();
+			ChessHandler.setChessNodeColor(delNode.getX(), delNode.getY(), Color.white);
+		}
+		if(isSelf == true){
+			setRunState(false);
+		}
+		if(isFood == true){
+			FoodHandler.eatFood();
+		}
+		return;
+	}
+	private int fabs(int a, int b){
+		if(a>=b){
+			return (a-b);
+		}
+		else{
+			return (b-a);
+		}
+	}
+	public void changeNowDir(){
+		if(getDirLock()&&(getNextDir()!=-1)){
+			setDirLock(false);
+			if((nextdir==1&&nowdir!=2)||(nextdir==2&&nowdir!=1))
+			{
+				setNowDir(nextdir);
+			}
+			if((nextdir==3&&nowdir!=4)||(nextdir==4&&nowdir!=3))
+			{
+				setNowDir(nextdir);
+			}
+			setNextDir(-1);
+			setDirLock(true);
+		}
+	}
+	public void keyInteSetNextDir(int dir){
+		if(dir>=1&&dir<=4){
+			nextdir = dir;
+		}
+		else{
+			System.out.println("you input a invaild key value! the key value is:"+dir);
+		}
+	}
+	private void run()
+	{
+		while(runstate){
+			FoodHandler.generateFood();
+			changeNowDir();
+			setDirLock(false);
+			moveAction();
+			setDirLock(true);
+			// something operations
+			try{
+				Thread.sleep(200);
+			}catch(Exception e){
+				System.out.println("occur a exception ,the message is:"+ e.getMessage());
+			}
+		}
+		System.out.println("The game is over!");
+	}
+	public void getStart(){
+		getFirstNodeByRandom();
+		run();
+		// something operations 
+	}
+	
+}
