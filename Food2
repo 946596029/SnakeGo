@@ -1,0 +1,83 @@
+import java.awt.Color;
+
+public class Food {
+	private int foodX,foodY;
+	private static int border = 20;
+	private Chess ChessHandler = null;
+	private boolean foodFlag = false;
+	private int count = 0; 
+	Food()
+	{
+		foodX = 0;
+		foodY = 0;
+		count = 0;
+		foodFlag = false;
+	}
+	private void setCount(int increment){
+		int total = count + increment;
+		if(total>=0&&total<=6){
+			count = total;
+			System.out.println("value of count is:" + count);
+		}
+	}
+	public int getCount(){
+		return this.count;
+	}
+	public void eatFood(){
+		setCount(-1);
+	}
+	private void testCount(){
+		if(getCount() == 6){
+			setFoodFlag(false);
+		}
+		else{
+			setFoodFlag(true);
+		}
+	}
+ 	private void setFoodFlag(boolean data){
+		foodFlag = data;
+	}
+	public boolean getFoodFlag(){
+		return this.foodFlag;
+	}
+	public void getChessHandler(Chess entity){
+		if(entity != null){
+			ChessHandler = entity;
+			setFoodFlag(true);
+		}
+		else{
+			System.out.println("you transport a null pointer to me !!! from Food getChess()");
+			setFoodFlag(false);
+		}
+	}
+	public void generateFood(){
+		testCount();
+		if(getFoodFlag()){
+			int max = 2000;// max random count number ,if above this , stop it and set flag false
+			do{
+				foodX=(int)(Math.random()*100)%border;
+				foodY=(int)(Math.random()*100)%border;
+				if(ChessHandler.getChessNodeColor(foodX, foodY)==Color.white){
+					ChessHandler.setChessNodeColor(foodX, foodY, Color.black);
+					setCount(1);
+					break;
+				}
+				max--;
+			}while(max != 0);
+			if(max == 0){
+				setFoodFlag(false);
+				System.out.println("something wrong ! please check it! from food generateFood()");
+			}
+		}
+		else{
+			if(!getFoodFlag())
+			{
+				System.out.println("Sorry, i can not generate food ,beacause the flag bit is false ! please check it");
+			}
+		}
+	}
+}
+
+// can call getChess to get Chess entity
+// can call generateFood to generate food in chess
+// can call getFoodFlag to check foodflag bit
