@@ -1,0 +1,43 @@
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+public class Input implements KeyListener{
+	private int nextdir;
+	Snake SnakeHandler = null;
+	Input(){
+		nextdir=0;
+	}
+	public void getSnakeHandler(Snake entity){
+		if(entity != null){
+			SnakeHandler = entity;
+		}
+		else{
+			System.out.println("you transport a empty reference of SnakeHandler!");
+		}
+	}
+	public void keyPressed(KeyEvent event) {
+		// TODO Auto-generated method stub
+	}
+	public void keyReleased(KeyEvent event) {
+		if(event.getKeyCode()==KeyEvent.VK_UP)
+		{
+			SnakeHandler.keyInteSetNextDir(1);
+		}
+		else if(event.getKeyCode()==KeyEvent.VK_DOWN)
+		{
+			SnakeHandler.keyInteSetNextDir(2);
+		}
+		else if(event.getKeyCode()==KeyEvent.VK_LEFT)
+		{
+			SnakeHandler.keyInteSetNextDir(3);
+		}
+		else if(event.getKeyCode()==KeyEvent.VK_RIGHT)
+		{
+			SnakeHandler.keyInteSetNextDir(4);
+		}
+	}
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+}
