@@ -1,0 +1,72 @@
+public class queue {
+	private int[][] location = null;
+	private int len = 400;
+	private int start,end;
+	queue()
+	{
+		start =1;
+		end   =1;
+		len = 400;
+		location = new int[len][2];
+	}
+	private void setLen(int data){
+		if(data>0&&data<10000){
+			this.len = data;
+		}
+		else{
+			System.out.println("invaild len value ,please above 0 and below 10000!!");
+		}
+	}
+	public int getLen(){
+		return this.len;
+	}
+	private void setStart(int index){
+		if(this.start<len&&this.start>=0&&start!=end){
+			this.start = index;
+		}
+		else{
+			System.out.println("invaild start value ,the value of start is:"+index);
+		}
+	}
+	public int getStart(){
+		return this.start;
+	}
+	private void setEnd(int index){
+		if(this.end<len&&this.end>=0&&start!=end){
+			this.end = index;
+		}
+		else{
+			System.out.println("invaild end value ,the value of end is:"+index);
+		}
+	}
+	public int getEnd(){
+		return this.end;
+	}
+	public void push(int x,int y){
+		int next = (start+1+len)%len;
+		if(next==end){
+			System.out.println("Sorry, the queue is full ! can not insert item! the start value is :"+start);
+		}
+		else{
+			location[next][0]=x;
+			location[next][1]=y;
+			start = next;
+		}
+	}
+	public coord pop(){
+		int next = (end+1+len)%len;
+		if(next<=start){
+			// vaild
+			coord one = new coord(location[next][0],location[next][1]);
+			location[next][0] = 0;
+			location[next][1] = 0;
+			end = next;
+			return one;
+		}
+		else{
+			// invaild end value
+			System.out.println("Sorry, the queue is empty ! can not pop item! the end value is :"+end);
+			return null;
+		}
+	}
+}
