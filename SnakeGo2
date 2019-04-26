@@ -1,0 +1,38 @@
+import java.awt.Color;
+
+import javax.swing.JFrame;
+
+import java.awt.*;
+
+public class SnakeGo extends JFrame{
+	Chess chess = null;
+	Snake snake = null;
+	Food food = null;
+	Input input = null;
+	SnakeGo(){
+		super();
+		// init class member
+		chess = new Chess();
+		snake = new Snake();
+		food = new Food();
+		input = new Input();
+		food.getChessHandler(chess);
+		input.getSnakeHandler(snake);
+		snake.getChessHandler(chess);
+		snake.getFoodHandler(food);
+		//chess.setChessNodeColor(4, 6, Color.black);
+		this.add(chess.Game_Table);
+		this.addKeyListener(input);
+		this.setFocusable(true);
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setBounds(200,300,700,700);
+		this.setVisible(true);
+		snake.getStart();
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		SnakeGo Go = new SnakeGo();
+	}
+
+}
